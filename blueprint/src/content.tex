@@ -133,14 +133,15 @@ in Part I is invariant under homeomorphism.
 
 \begin{proof}
   \uses{lem:bsc-easy}
-  \label{thm:bsc-hard}
-  The forward direction is Lemma~\ref{lem:bsc-easy}. For the converse, work in
-  the complete metric space of continuous maps $X\to X$ with the sup metric.
-  Inductively compose shrinking homeomorphisms $h_1, h_2,\dots$ with rapidly
-  decreasing $\varepsilon_k$ so that $f h_1^{-1}\cdots h_k^{-1}$ converges
-  uniformly to a map that is injective, hence a homeomorphism. Alternatively,
-  use the Baire category theorem on the closure of
-  $\{f\circ h : h \in \mathrm{Homeo}(X)\}$ in $C(X,Y)$.
+  \leanok
+  The forward direction is Lemma~\ref{lem:bsc-easy}. For the converse, let
+  $A$ be the closure of $\{f\circ h : h\in\mathrm{Homeo}(X)\}$ in $C(X,Y)$ with
+  the sup metric; it is complete, hence Baire. Every map in $A$ is surjective.
+  For each $n$, the maps that separate points at distance $\ge 1/(n+1)$ form an
+  open subset of $A$ (by compactness of $X\times X$), and the shrinking criterion,
+  together with uniform continuity of $h^{-1}$, shows it is dense. A map in the
+  intersection that is within $\varepsilon$ of $f$ is a continuous bijection
+  from a compact space to a Hausdorff space, hence a homeomorphism.
 \end{proof}
 
 \section{Remaining chapters of Part I}

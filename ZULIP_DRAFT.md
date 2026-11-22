@@ -14,8 +14,9 @@ The plan is to begin with Part I of the book (decomposition space theory), since
 pure metric topology and useful outside 4-manifolds. So far there is:
 
 - `ApproximableByHomeomorphisms` and `SatisfiesBSC` (Edwards' map formulation, compact
-  metric spaces), with the easy direction of the Bing shrinking criterion proved
-- statements of the BSC, "cellular sets shrink", Brown's generalized Schoenflies, and
+  metric spaces), and a complete, sorry-free proof of the Bing shrinking criterion
+  (Baire category in `C(X, Y)`). I'd like to upstream it to Mathlib.
+- statements of "cellular sets shrink", Brown's generalized Schoenflies, and
   `poincare_four` (closed topological 4-manifold ≃ₕ S⁴ ⇒ ≃ₜ S⁴)
 
 Design questions I'd like opinions on:
