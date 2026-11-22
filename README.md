@@ -13,7 +13,9 @@ Part I, decomposition space theory.
 |---|---|---|---|---|
 | Model disc, sphere, topological ball | — | `Disc`, `Sphere`, `IsTopBall` | ✅ | — |
 | Cellular sets | Ch. 3 | `IsCellular` | ✅ | — |
-| Cellular sets shrink | Ch. 3 | `cellular_quotient_approximable` | ✅ | ⬜ |
+| Radial squeeze of ℝⁿ; transplanting through open embeddings | Ch. 3 | `squeezeHomeomorph`, `transplant` | ✅ | ✅ |
+| Cellular sets shrink (general metric spaces) | Ch. 3 | `IsCellular.satisfiesBSC_of_collapse` | ✅ | ✅ |
+| Cellular sets shrink (in Sⁿ) | Ch. 3 | `cellular_quotient_approximable` | ✅ | ✅ |
 | Generalized Schoenflies (Brown) | Ch. 3 | `generalized_schoenflies` | ✅ | ⬜ |
 | Approximable by homeomorphisms | Ch. 4 | `ApproximableByHomeomorphisms` | ✅ | — |
 | Bing shrinking criterion (BSC) condition | Ch. 4 | `SatisfiesBSC` | ✅ | — |
@@ -38,7 +40,12 @@ Every `sorry` corresponds to an entry in the blueprint (`blueprint/src/content.t
    metric spaces). For upper semicontinuous decompositions of compact metric spaces
    the two are equivalent; a bridging lemma will be needed when we construct explicit
    decompositions (Ch. 5 on).
-3. **Topological manifolds** are `[T2Space M] [SecondCountableTopology M]
+3. **Collared cellular sets.** `IsCellular` asks for nested balls `eᵢ(Dⁿ)` where each
+   `eᵢ : ℝⁿ → M` is an open embedding, and `Bᵢ₊₁ ⊆ eᵢ(open unit ball)`. In a manifold this
+   is equivalent to the book's definition (arbitrary balls with `Bᵢ₊₁ ⊆ int Bᵢ`), but the
+   equivalence needs invariance of domain, which Mathlib lacks. Brown's proof produces
+   collared balls anyway.
+4. **Topological manifolds** are `[T2Space M] [SecondCountableTopology M]
    [ChartedSpace (Fin n → ℝ) M]`. `poincare_four` also assumes `CompactSpace M`,
    which is slightly weaker than Mathlib's `proof_wanted` (Hausdorff only).
 
@@ -65,6 +72,6 @@ from the repo root. (`blueprint/src/print.tex` also compiles with plain `pdflate
    check the statements, especially `generalized_schoenflies`, `poincare_four` and the
    map formulation of the BSC.
 2. Upstream the Bing shrinking criterion (now fully proved) to Mathlib.
-3. Prove `cellular_quotient_approximable`, then `generalized_schoenflies`.
+3. Prove `generalized_schoenflies` (Brown's argument, using the cellular-set result).
 4. Transcribe the ball to ball theorem (Ch. 10) exactly from [DET] and state it.
 5. Only then start the Part II infrastructure (immersed discs, intersection numbers).

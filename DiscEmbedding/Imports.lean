@@ -13,3 +13,12 @@ public import Mathlib.Topology.Baire.CompleteMetrizable
 public import Mathlib.Topology.Baire.Lemmas
 public import Mathlib.Topology.Homeomorph.Lemmas
 public import Mathlib.Topology.Order.Compact
+public import Mathlib.Analysis.Normed.Module.Basic
+public import Mathlib.Topology.MetricSpace.ProperSpace
+public import Mathlib.Topology.Order.MonotoneContinuity
+public import Mathlib.Topology.Order.IntermediateValue
+public import Mathlib.Order.Filter.AtTopBot.Field
+public import Mathlib.Order.Hom.Set
+public import Mathlib.Topology.Algebra.GroupWithZero
+public import Mathlib.Tactic.FieldSimp
+public import Mathlib.Tactic.Linarith

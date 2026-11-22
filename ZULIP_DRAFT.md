@@ -16,7 +16,9 @@ pure metric topology and useful outside 4-manifolds. So far there is:
 - `ApproximableByHomeomorphisms` and `SatisfiesBSC` (Edwards' map formulation, compact
   metric spaces), and a complete, sorry-free proof of the Bing shrinking criterion
   (Baire category in `C(X, Y)`). I'd like to upstream it to Mathlib.
-- statements of "cellular sets shrink", Brown's generalized Schoenflies, and
+- a proof that cellular sets shrink (collapsing a cellular set in a compact metric space
+  doesn't change it up to homeomorphism)
+- statements of Brown's generalized Schoenflies and
   `poincare_four` (closed topological 4-manifold ≃ₕ S⁴ ⇒ ≃ₜ S⁴)
 
 Design questions I'd like opinions on:
@@ -25,7 +27,10 @@ Design questions I'd like opinions on:
    should this be `EuclideanSpace ℝ (Fin n)` from the start?
 2. Map formulation vs. decomposition formulation of shrinking. Does Mathlib want an
    upper-semicontinuous-decomposition API, or is the map version enough?
-3. Topological manifolds as `ChartedSpace (Fin n → ℝ) M` plus `T2Space` and
+3. `IsCellular` uses collared balls (images of `Dⁿ` under open embeddings `ℝⁿ → M`)
+   to avoid needing invariance of domain. Is that acceptable, or is anyone working on
+   invariance of domain?
+4. Topological manifolds as `ChartedSpace (Fin n → ℝ) M` plus `T2Space` and
    `SecondCountableTopology`. Is that the current recommended idiom for C⁰ manifolds?
 
 I'd especially welcome a 4-manifold topologist willing to check statements as they're

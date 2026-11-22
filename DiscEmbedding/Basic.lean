@@ -36,11 +36,19 @@ def IsTopBall (n : ℕ) {X : Type*} [TopologicalSpace X] (B : Set X) : Prop :=
   Nonempty (B ≃ₜ Disc n)
 
 /-- A subset `A` of a space `M` is *cellular* (of dimension `n`) if it is the intersection
-of a nested sequence of topological `n`-balls, each contained in the interior of the
-previous one. (Book, Definition in Chapter 3; usually `M` is an `n`-manifold.) -/
+of a nested sequence of closed `n`-balls `Bᵢ = eᵢ(Dⁿ)`, each contained in the interior of
+the previous one. (Book, Chapter 3.)
+
+We take each ball to be *collared*: it is the image of the closed unit ball under an
+open embedding `eᵢ : ℝⁿ → M`, and "interior" means `eᵢ` of the open unit ball. When `M`
+is an `n`-manifold this is equivalent to the book's definition (using arbitrary
+topological balls with `Bᵢ₊₁ ⊆ int Bᵢ`), but proving the equivalence needs invariance
+of domain, which Mathlib does not yet have. The collared version is what Brown's proof
+of the generalized Schoenflies theorem produces, so nothing is lost for our purposes. -/
 def IsCellular (n : ℕ) {M : Type*} [TopologicalSpace M] (A : Set M) : Prop :=
-  ∃ B : ℕ → Set M, (∀ i, IsTopBall n (B i)) ∧ (∀ i, B (i + 1) ⊆ interior (B i)) ∧
-    A = ⋂ i, B i
+  ∃ e : ℕ → (Fin n → ℝ) → M, (∀ i, IsOpenEmbedding (e i)) ∧
+    (∀ i, e (i + 1) '' closedBall 0 1 ⊆ e i '' ball 0 1) ∧
+    A = ⋂ i, e i '' closedBall 0 1
 
 /-- The point `0 ∈ [-1, 1]`, used to pick out the central slice of a bicollar. -/
 def collarZero : Icc (-1 : ℝ) 1 := ⟨0, by norm_num, by norm_num⟩

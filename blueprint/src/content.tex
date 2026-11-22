@@ -45,26 +45,63 @@ in Part I is invariant under homeomorphism.
   \label{def:cellular}
   \lean{DiscEmbedding.IsCellular}
   \leanok
-  \uses{def:top-ball}
-  $A \subseteq M$ is cellular if $A = \bigcap_i B_i$ for topological $n$-balls
-  $B_i$ with $B_{i+1} \subseteq \operatorname{int} B_i$.
+  \uses{def:disc}
+  $A \subseteq M$ is cellular if $A = \bigcap_i e_i(D^n)$, where each
+  $e_i\colon \mathbb{R}^n \to M$ is an open embedding and
+  $e_{i+1}(D^n) \subseteq e_i(\operatorname{int} D^n)$. (In a manifold this is
+  equivalent, via invariance of domain, to asking for arbitrary $n$-balls $B_i$
+  with $B_{i+1}\subseteq \operatorname{int} B_i$.)
 \end{definition}
+
+\begin{lemma}[Radial squeeze]
+  \label{lem:squeeze}
+  \lean{DiscEmbedding.squeezeHomeomorph}
+  \leanok
+  For $0<\delta<r<1$ there is a homeomorphism of $\mathbb{R}^n$ that is the
+  identity outside $D^n$, preserves $D^n$, and maps the closed $r$-ball into the
+  closed $\delta$-ball.
+\end{lemma}
+
+\begin{proof}
+  \leanok
+  Rescale each vector radially by the piecewise-linear order automorphism of
+  $\mathbb{R}$ through $(0,0)$, $(r,\delta)$, $(1,1)$ with slope $1$ beyond $1$.
+\end{proof}
+
+\begin{lemma}[Transplanting]
+  \label{lem:transplant}
+  \lean{DiscEmbedding.transplant}
+  \leanok
+  If $e\colon E\to M$ is an open embedding into a Hausdorff space and $\sigma$ is a
+  homeomorphism of $E$ that is the identity outside a compact set, then
+  $e\sigma e^{-1}$ on $e(E)$, extended by the identity, is a homeomorphism of $M$.
+\end{lemma}
+
+\begin{proof}
+  \leanok
+  Continuity follows on the open set $e(E)$ and on the open complement of the
+  compact set $e(K)$, which together cover $M$.
+\end{proof}
 
 \begin{theorem}[Cellular sets shrink]
   \label{thm:cellular-shrink}
-  \lean{DiscEmbedding.cellular_quotient_approximable}
+  \lean{DiscEmbedding.IsCellular.satisfiesBSC_of_collapse, DiscEmbedding.cellular_quotient_approximable}
   \leanok
-  \uses{def:cellular, def:approx}
-  If $A \subseteq S^n$ is cellular and $q \colon S^n \to S^n$ is a continuous
-  surjection whose only nondegenerate point-inverse is $A$, then $q$ is
-  approximable by homeomorphisms. In particular $S^n/A \cong S^n$.
+  \uses{def:cellular, def:approx, def:bsc}
+  If $A \subseteq M$ is cellular and $q\colon M \to Y$ collapses exactly $A$ to a
+  point, then $q$ satisfies the shrinking criterion. Hence if $M$ is compact, $q$ is
+  approximable by homeomorphisms; in particular $S^n/A \cong S^n$.
 \end{theorem}
 
 \begin{proof}
-  \uses{thm:bsc}
-  Verify the Bing shrinking criterion: given $\varepsilon$, use a ball $B_i$
-  inside a small neighbourhood of $A$ and a homeomorphism supported near $B_i$
-  that radially squeezes $B_i$ into a set of diameter $<\varepsilon$.
+  \uses{thm:bsc, lem:squeeze, lem:transplant}
+  \leanok
+  Given $\varepsilon$, choose $i$ with $q(e_i(D^n))$ within $\varepsilon/2$ of the
+  collapse point. Then $A\subseteq e_{i+1}(D^n)$ lies in $e_i$ of a closed
+  $r$-ball with $r<1$. Transplant the radial squeeze through $e_i$, with $\delta$
+  chosen so that $e_i$ maps the $\delta$-ball into an $\varepsilon/3$-ball. The
+  result moves points only within $e_i(D^n)$ and shrinks $A$ to diameter
+  $<\varepsilon$; every other fiber is a point.
 \end{proof}
 
 \begin{theorem}[Generalized Schoenflies]

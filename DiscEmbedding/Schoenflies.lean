@@ -7,11 +7,12 @@ Brown's theorem: a bicollared `(n-1)`-sphere in `Sⁿ` bounds an `n`-ball on eac
 Brown's proof is the book's first example of a shrinking argument: the key step is that
 the quotient of `Sⁿ` by a cellular set is again `Sⁿ`.
 
-Status: statements only.
+Status: `cellular_quotient_approximable` is proved; the Schoenflies theorem itself is
+stated only.
 -/
 module
 
-public import DiscEmbedding.Shrinking
+public import DiscEmbedding.Cellular
 
 @[expose] public section
 
@@ -19,18 +20,19 @@ namespace DiscEmbedding
 
 open Metric Set Topology
 
-/-- Shrinking a single cellular set: if `A` is a cellular subset of a compact metric
-`n`-manifold-like space `M`, then the quotient map `M → M/A` is approximable by
-homeomorphisms. We state the special case `M = Sⁿ` needed for Brown's proof, phrased
-via an arbitrary continuous surjection collapsing exactly `A` to a point.
-(Book, Chapter 3, "shrinking cellular sets".) -/
+/-- Shrinking a single cellular set in a sphere: if `A ⊆ Sⁿ` is cellular and
+`q : Sⁿ → Sⁿ` is a continuous surjection collapsing exactly `A` to a point, then `q` is
+approximable by homeomorphisms. This is the key step in Brown's proof.
+(Book, Chapter 3.) See `IsCellular.approximableByHomeomorphisms_of_collapse` for the
+general version. -/
 theorem cellular_quotient_approximable (n : ℕ) (A : Set (Sphere (n + 1)))
-    (hA : IsCellular n A) (hne : A.Nonempty)
+    (hA : IsCellular n A)
     (q : Sphere (n + 1) → Sphere (n + 1)) (hq : Continuous q)
     (hsurj : Function.Surjective q)
     (hcollapse : ∃ p, q ⁻¹' {p} = A ∧ ∀ y ≠ p, (q ⁻¹' {y}).Subsingleton) :
     ApproximableByHomeomorphisms q := by
-  sorry
+  obtain ⟨p, hpA, hp⟩ := hcollapse
+  exact hA.approximableByHomeomorphisms_of_collapse hq hsurj hpA hp
 
 /-- **Generalized Schoenflies theorem** (Brown 1960; Mazur; Morse).
 Let `e : Sⁿ⁻¹ × [-1, 1] → Sⁿ` be an embedding (a bicollar). Then the complement of the
