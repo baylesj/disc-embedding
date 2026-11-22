@@ -1,0 +1,181 @@
+% Blueprint for the formalization of Freedman's disc embedding theorem.
+% Source: S. Behrens, B. Kalmár, M. H. Kim, M. Powell, A. Ray (eds.),
+%   The Disc Embedding Theorem, Oxford University Press, 2021. Cited as [DET].
+% Secondary: M. H. Freedman, "Bing Topology and Casson Handles",
+%   2013 lectures, notes by S. Behrens (freely available).
+%
+% Conventions: \lean{...} names the Lean declaration, \leanok marks a
+% statement (or proof) that is formalized, \uses{...} records dependencies.
+% Chapter numbers refer to [DET].
+
+\chapter{Overview and conventions}
+
+The goal is a complete Lean formalization of the disc embedding theorem
+[DET, Ch.~11] and its headline consequence, the topological
+4-dimensional Poincar\'e conjecture. We follow the book chapter by chapter.
+
+\paragraph{Models.} We model the closed $n$-disc $D^n$ as the closed unit ball
+of $\mathbb{R}^n$ with the sup metric (the cube $[-1,1]^n$) and $S^{n-1}$ as its
+boundary. These are homeomorphic to the round disc and sphere; every statement
+in Part I is invariant under homeomorphism.
+
+\begin{definition}[Model disc and sphere]
+  \label{def:disc}
+  \lean{DiscEmbedding.Disc, DiscEmbedding.Sphere}
+  \leanok
+  $D^n = \{x \in \mathbb{R}^n : \|x\|_\infty \le 1\}$ and
+  $S^{n-1} = \partial D^n$. In Lean, \texttt{Sphere (n+1)} is the $n$-sphere.
+\end{definition}
+
+\begin{definition}[Topological ball]
+  \label{def:top-ball}
+  \lean{DiscEmbedding.IsTopBall}
+  \leanok
+  \uses{def:disc}
+  A subset $B \subseteq X$ is a topological $n$-ball if it is homeomorphic,
+  with the subspace topology, to $D^n$.
+\end{definition}
+
+% ------------------------------------------------------------------
+\chapter{Part I: Decomposition space theory}
+
+\section{The Schoenflies theorem after Mazur, Morse and Brown [DET, Ch.~3]}
+
+\begin{definition}[Cellular set]
+  \label{def:cellular}
+  \lean{DiscEmbedding.IsCellular}
+  \leanok
+  \uses{def:top-ball}
+  $A \subseteq M$ is cellular if $A = \bigcap_i B_i$ for topological $n$-balls
+  $B_i$ with $B_{i+1} \subseteq \operatorname{int} B_i$.
+\end{definition}
+
+\begin{theorem}[Cellular sets shrink]
+  \label{thm:cellular-shrink}
+  \lean{DiscEmbedding.cellular_quotient_approximable}
+  \leanok
+  \uses{def:cellular, def:approx}
+  If $A \subseteq S^n$ is cellular and $q \colon S^n \to S^n$ is a continuous
+  surjection whose only nondegenerate point-inverse is $A$, then $q$ is
+  approximable by homeomorphisms. In particular $S^n/A \cong S^n$.
+\end{theorem}
+
+\begin{proof}
+  \uses{thm:bsc}
+  Verify the Bing shrinking criterion: given $\varepsilon$, use a ball $B_i$
+  inside a small neighbourhood of $A$ and a homeomorphism supported near $B_i$
+  that radially squeezes $B_i$ into a set of diameter $<\varepsilon$.
+\end{proof}
+
+\begin{theorem}[Generalized Schoenflies]
+  \label{thm:schoenflies}
+  \lean{DiscEmbedding.generalized_schoenflies}
+  \leanok
+  \uses{def:top-ball}
+  If $e\colon S^{n-1}\times[-1,1] \hookrightarrow S^n$ is an embedding, then
+  $S^n \setminus e(S^{n-1}\times 0)$ has two components and the closure of each
+  is an $n$-ball.
+\end{theorem}
+
+\begin{proof}
+  \uses{thm:cellular-shrink}
+  Brown's argument: collapse each complementary side to a point; both
+  collapsed sets are cellular, so the quotient is still $S^n$, and the collar
+  identifies each side with a cone, hence a ball.
+\end{proof}
+
+\section{Decomposition space theory and the Bing shrinking criterion [DET, Ch.~4]}
+
+\begin{definition}[Approximable by homeomorphisms]
+  \label{def:approx}
+  \lean{DiscEmbedding.ApproximableByHomeomorphisms}
+  \leanok
+  $f\colon X \to Y$ is approximable by homeomorphisms if for every
+  $\varepsilon>0$ there is a homeomorphism $g\colon X\to Y$ with
+  $d(g(x), f(x))<\varepsilon$ for all $x$.
+\end{definition}
+
+\begin{definition}[Shrinking criterion]
+  \label{def:bsc}
+  \lean{DiscEmbedding.SatisfiesBSC}
+  \leanok
+  $f\colon X\to Y$ satisfies the Bing shrinking criterion if for every
+  $\varepsilon>0$ there is a homeomorphism $h\colon X\to X$ with
+  $d(fh(x), f(x)) < \varepsilon$ for all $x$ and
+  $\operatorname{diam} h(f^{-1}(y)) < \varepsilon$ for all $y$.
+\end{definition}
+
+\begin{lemma}[Easy direction]
+  \label{lem:bsc-easy}
+  \lean{DiscEmbedding.ApproximableByHomeomorphisms.satisfiesBSC}
+  \leanok
+  \uses{def:approx, def:bsc}
+  If $Y$ is compact and $f$ is approximable by homeomorphisms, then $f$
+  satisfies the shrinking criterion.
+\end{lemma}
+
+\begin{proof}
+  \leanok
+  Take $g$ within $\varepsilon/2$ of $f$; by uniform continuity of $g^{-1}$ pick
+  $\eta$; take $g'$ within $\min(\eta/2,\varepsilon/2)$ of $f$; set
+  $h=g^{-1}g'$.
+\end{proof}
+
+\begin{theorem}[Bing shrinking criterion]
+  \label{thm:bsc}
+  \lean{DiscEmbedding.bing_shrinking_criterion}
+  \leanok
+  \uses{def:approx, def:bsc}
+  A continuous surjection $f\colon X\to Y$ between compact metric spaces is
+  approximable by homeomorphisms if and only if it satisfies the shrinking
+  criterion.
+\end{theorem}
+
+\begin{proof}
+  \uses{lem:bsc-easy}
+  \label{thm:bsc-hard}
+  The forward direction is Lemma~\ref{lem:bsc-easy}. For the converse, work in
+  the complete metric space of continuous maps $X\to X$ with the sup metric.
+  Inductively compose shrinking homeomorphisms $h_1, h_2,\dots$ with rapidly
+  decreasing $\varepsilon_k$ so that $f h_1^{-1}\cdots h_k^{-1}$ converges
+  uniformly to a map that is injective, hence a homeomorphism. Alternatively,
+  use the Baire category theorem on the closure of
+  $\{f\circ h : h \in \mathrm{Homeo}(X)\}$ in $C(X,Y)$.
+\end{proof}
+
+\section{Remaining chapters of Part I}
+
+These are not yet stated in Lean. Each needs an explicit construction of a
+decomposition, which is where the formalization work starts to become
+geometric.
+
+\begin{itemize}
+  \item \textbf{Ch.~5} The Alexander gored ball and the Bing decomposition:
+        the Bing decomposition of $S^3$ shrinks.
+  \item \textbf{Ch.~6} A decomposition that does not shrink (Bing-2).
+  \item \textbf{Ch.~7} The Whitehead decomposition.
+  \item \textbf{Ch.~8} Mixed Bing--Whitehead decompositions.
+  \item \textbf{Ch.~9} Shrinking starlike sets.
+  \item \textbf{Ch.~10} The ball to ball theorem. \emph{This is the Part I
+        result used later in the proof; its hypotheses must be transcribed
+        exactly from [DET] before it is stated in Lean.}
+\end{itemize}
+
+% ------------------------------------------------------------------
+\chapter{Parts II--IV: Building skyscrapers, and skyscrapers are standard}
+
+Not yet started. Infrastructure needed (none of it is in Mathlib):
+topological 4-manifolds with boundary and handle decompositions; generic
+immersions of discs and spheres; intersection and self-intersection numbers
+(with $\mathbb{Z}[\pi_1]$ coefficients); Whitney and finger moves; gropes,
+towers and skyscrapers [DET, Ch.~12--14]; the ``picture camp'' calculus
+[DET, Ch.~13]; the collar adding lemma [DET, Ch.~25].
+
+\begin{theorem}[Topological 4-dimensional Poincar\'e conjecture]
+  \label{thm:poincare4}
+  \lean{DiscEmbedding.poincare_four}
+  \leanok
+  \uses{def:disc}
+  A closed topological 4-manifold homotopy equivalent to $S^4$ is homeomorphic
+  to $S^4$.
+\end{theorem}

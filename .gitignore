@@ -1,0 +1,4 @@
+.lake/
+blueprint/web/
+blueprint/print/
+*.olean
