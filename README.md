@@ -16,7 +16,10 @@ Part I, decomposition space theory.
 | Radial squeeze of ℝⁿ; transplanting through open embeddings | Ch. 3 | `squeezeHomeomorph`, `transplant` | ✅ | ✅ |
 | Cellular sets shrink (general metric spaces) | Ch. 3 | `IsCellular.satisfiesBSC_of_collapse` | ✅ | ✅ |
 | Cellular sets shrink (in Sⁿ) | Ch. 3 | `cellular_quotient_approximable` | ✅ | ✅ |
-| Generalized Schoenflies (Brown) | Ch. 3 | `generalized_schoenflies` | ✅ | ⬜ |
+| Brown Thm 1: collapse a cellular set inside a cell | Ch. 3 | `brown_collapse_cellular` | ✅ | ✅ |
+| Brown Thm 4: two inverse sets are cellular | Ch. 3 | `brown_two_inverse_sets` | ✅ | ⬜ |
+| Brown Thm 5: each side of a bicollared sphere is a ball | Ch. 3 | `brown_closure_isTopBall` | ✅ | ⬜ |
+| Generalized Schoenflies | Ch. 3 | `generalized_schoenflies` | ✅ | ✅ from IOU + Brown 5 |
 | Approximable by homeomorphisms | Ch. 4 | `ApproximableByHomeomorphisms` | ✅ | — |
 | Bing shrinking criterion (BSC) condition | Ch. 4 | `SatisfiesBSC` | ✅ | — |
 | BSC, easy direction | Ch. 4 | `ApproximableByHomeomorphisms.satisfiesBSC` | ✅ | ✅ |
@@ -28,6 +31,20 @@ Part I, decomposition space theory.
 | **4D topological Poincaré** | Ch. 1, 21 | `poincare_four` | ✅ | ⬜ |
 
 Every `sorry` corresponds to an entry in the blueprint (`blueprint/src/content.tex`).
+
+## IOUs
+
+Three classical theorems of algebraic topology are used but not yet in Mathlib. They
+live in `DiscEmbedding/IOU.lean` as explicit `sorry`s. Every result is proved relative
+to them, and `#print axioms` shows exactly which results depend on them (via `sorryAx`).
+All three follow from degree theory or the homology of spheres. Discharging them is a
+self-contained project that would be valuable to Mathlib on its own.
+
+| IOU | Lean declaration | Used by |
+|---|---|---|
+| Brouwer no-retraction | `no_retraction` | Brown Thm 0 |
+| Invariance of domain | `invariance_of_domain` | Brown Thm 0 |
+| Jordan–Brouwer separation | `jordan_brouwer_separation` | Brown Thm 0, `generalized_schoenflies` |
 
 ## Design choices to review
 
@@ -72,6 +89,6 @@ from the repo root. (`blueprint/src/print.tex` also compiles with plain `pdflate
    check the statements, especially `generalized_schoenflies`, `poincare_four` and the
    map formulation of the BSC.
 2. Upstream the Bing shrinking criterion (now fully proved) to Mathlib.
-3. Prove `generalized_schoenflies` (Brown's argument, using the cellular-set result).
+3. Finish Brown's chain: Theorems 0, 2, 3 (blueprint only so far), then 4 and 5.
 4. Transcribe the ball to ball theorem (Ch. 10) exactly from [DET] and state it.
 5. Only then start the Part II infrastructure (immersed discs, intersection numbers).

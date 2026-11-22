@@ -104,6 +104,98 @@ in Part I is invariant under homeomorphism.
   $<\varepsilon$; every other fiber is a point.
 \end{proof}
 
+\subsection*{IOUs from algebraic topology}
+
+The following classical results are used but not yet formalized. They are stated
+in \texttt{IOU.lean} with \texttt{sorry}.
+
+\begin{theorem}[IOU: no-retraction]
+  \label{iou:noretract}
+  \lean{DiscEmbedding.no_retraction}
+  \leanok
+  There is no retraction of $D^n$ onto $\partial D^n$.
+\end{theorem}
+
+\begin{theorem}[IOU: invariance of domain]
+  \label{iou:iod}
+  \lean{DiscEmbedding.invariance_of_domain}
+  \leanok
+  An injective continuous map from an open subset of $\mathbb{R}^n$ to
+  $\mathbb{R}^n$ has open image.
+\end{theorem}
+
+\begin{theorem}[IOU: Jordan--Brouwer separation]
+  \label{iou:jb}
+  \lean{DiscEmbedding.jordan_brouwer_separation}
+  \leanok
+  The complement of an embedded $S^{n-1}$ in $S^n$ has exactly two components,
+  each with the sphere as frontier.
+\end{theorem}
+
+\subsection*{Brown's proof}
+
+We follow M.~Brown, \emph{A proof of the generalized Schoenflies theorem}, Bull.\ AMS
+66 (1960). An \emph{inverse set} of a map is a fiber with at least two points.
+
+\begin{theorem}[Brown, Thm.~0]
+  \label{thm:brown0}
+  \uses{iou:noretract, iou:iod, iou:jb}
+  If $Q$ is an $n$-cell and $f\colon Q\to S^n$ has finitely many inverse sets, all
+  in $Q$, then $f(Q)$ is the union of $f(\partial Q)$ and one complementary domain of
+  $f(\partial Q)$.
+\end{theorem}
+
+\begin{theorem}[Brown, Thm.~1]
+  \label{thm:brown1}
+  \lean{DiscEmbedding.brown_collapse_cellular}
+  \leanok
+  \uses{def:cellular, lem:squeeze, lem:transplant}
+  A cellular subset $M$ of the open cube admits a continuous surjection of
+  $\mathbb{R}^n$, the identity outside the open cube, whose only inverse set is $M$.
+\end{theorem}
+
+\begin{proof}
+  \leanok
+  Set $h_0=\mathrm{id}$ and $h_{k+1}=h_k\tau_k$, where $\tau_k$ is supported in $B_k$,
+  maps $B_k$ into itself, and makes $\operatorname{diam} h_{k+1}(B_{k+1})<1/(k+1)$.
+  Then $h_j(B_k)\subseteq h_k(B_k)$ for $j\ge k$, so the $h_k$ converge uniformly. The
+  limit collapses $M$ and is injective elsewhere, and it is surjective as a uniform
+  limit of surjections.
+\end{proof}
+
+\begin{theorem}[Brown, Thm.~2]
+  \label{thm:brown2}
+  \uses{thm:brown1}
+  Let $D$ be a complementary domain of an $(n-1)$-sphere in $S^n$. If $f$ maps
+  $\overline{D}$ onto an $n$-cell with a single, cellular inverse set $M\subseteq D$,
+  then $\overline{D}$ is an $n$-cell.
+\end{theorem}
+
+\begin{theorem}[Brown, Thm.~3]
+  \label{thm:brown3}
+  \uses{thm:brown0, lem:transplant}
+  If $f\colon Q\to S^n$ has a single inverse set $M\subseteq\operatorname{int}Q$,
+  then $M$ is cellular.
+\end{theorem}
+
+\begin{theorem}[Brown, Thm.~4]
+  \label{thm:brown4}
+  \lean{DiscEmbedding.brown_two_inverse_sets}
+  \leanok
+  \uses{thm:brown0, thm:brown3}
+  If $f\colon S^n\to S^n$ is surjective with exactly two inverse sets, both are
+  cellular.
+\end{theorem}
+
+\begin{theorem}[Brown, Thm.~5]
+  \label{thm:brown5}
+  \lean{DiscEmbedding.brown_closure_isTopBall}
+  \leanok
+  \uses{thm:brown4, thm:brown2}
+  The closure of each complementary component of a bicollared $(n-1)$-sphere in
+  $S^n$ is an $n$-ball.
+\end{theorem}
+
 \begin{theorem}[Generalized Schoenflies]
   \label{thm:schoenflies}
   \lean{DiscEmbedding.generalized_schoenflies}
@@ -115,10 +207,10 @@ in Part I is invariant under homeomorphism.
 \end{theorem}
 
 \begin{proof}
-  \uses{thm:cellular-shrink}
-  Brown's argument: collapse each complementary side to a point; both
-  collapsed sets are cellular, so the quotient is still $S^n$, and the collar
-  identifies each side with a cone, hence a ball.
+  \uses{iou:jb, thm:brown5}
+  \leanok
+  Jordan--Brouwer gives the two components; Brown's Theorem~5 shows each closure
+  is a ball.
 \end{proof}
 
 \section{Decomposition space theory and the Bing shrinking criterion [DET, Ch.~4]}

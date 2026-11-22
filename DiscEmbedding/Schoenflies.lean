@@ -7,12 +7,13 @@ Brown's theorem: a bicollared `(n-1)`-sphere in `Sⁿ` bounds an `n`-ball on eac
 Brown's proof is the book's first example of a shrinking argument: the key step is that
 the quotient of `Sⁿ` by a cellular set is again `Sⁿ`.
 
-Status: `cellular_quotient_approximable` is proved; the Schoenflies theorem itself is
-stated only.
+Status: `cellular_quotient_approximable` is proved. `generalized_schoenflies` is proved
+from the Jordan–Brouwer separation IOU and Brown's Theorem 5 (`Brown.lean`), whose
+proof is still open.
 -/
 module
 
-public import DiscEmbedding.Cellular
+public import DiscEmbedding.Brown
 
 @[expose] public section
 
@@ -44,7 +45,13 @@ theorem generalized_schoenflies (n : ℕ)
       IsOpen U ∧ IsOpen V ∧ IsConnected U ∧ IsConnected V ∧ Disjoint U V ∧
       U ∪ V = (range fun x : Sphere n => e (x, collarZero))ᶜ ∧
       IsTopBall n (closure U) ∧ IsTopBall n (closure V) := by
-  sorry
+  have hg : IsEmbedding fun x : Sphere n => e (x, collarZero) :=
+    he.comp (isEmbedding_prodMkLeft collarZero)
+  obtain ⟨U, V, hUo, hVo, hUc, hVc, hUV, hcov, -, -⟩ := jordan_brouwer_separation n _ hg
+  refine ⟨U, V, hUo, hVo, hUc, hVc, hUV, hcov, ?_, ?_⟩
+  · exact brown_closure_isTopBall n e he U V hUo hVo hUc hVc hUV hcov
+  · exact brown_closure_isTopBall n e he V U hVo hUo hVc hUc hUV.symm
+      (by rw [union_comm]; exact hcov)
 
 end DiscEmbedding
 
